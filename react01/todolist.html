@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../base/react.min.js"></script>
+    <script src="../base/react-dom.min.js"></script>
+    <script src="../base/browser.min.js"></script>
+    <style>
+       
+         input{
+             width:200px;
+             height:30px;
+            
+            padding-left:4px;
+            vertical-align: top;
+         }
+         .addinfo{
+             width:60px;
+             height:34px;
+             margin-right:10px;
+             
+         }
+    </style>
+
+</head>
+<body>
+   <div id="app"></div> 
+</body>
+
+<script type="text/babel">
+    let Component = React.createClass({
+        getInitialState(){
+           return {
+                inputVal:"",
+                dataList:[],
+                storageList:[],
+                show:false,
+                bshow:true
+           } 
+        },
+        handleInput(e){
+            let val = e.target.value;
+            this.setState({inputVal:val})
+           
+        },
+        delInfoData(index){
+            let delArr = this.state.dataList;
+            delArr.splice(index,1);
+            this.setState({dataList:delArr});
+            this.setState({storageList:delArr});
+            alert(index)
+        },
+        handleClick(){
+            let saveList = this.state.storageList;
+              saveList.push({inputVal:this.state.inputVal,state:false});
+              this.setState({storageList:saveList});
+              console.log(saveList,"-------saveList")
+            this.state.dataList.push({inputVal:this.state.inputVal,state:false});
+            console.log(this.state.dataList)
+             this.setState({inputVal:""})
+             this.setState({show:true})
+        },
+        changeInfoData(index){
+            this.state.dataList[index].state = true;
+            this.state.storageList[index].state = true;
+            this.setState({dataList:this.state.dataList});
+            this.setState({storageList:this.state.storageList});
+            console.log( this.state.storageList,"-------saveList");
+             
+        },
+        all(val){
+           switch (val) {
+               case 0:
+                 
+                       let save = this.state.storageList;
+                      this.setState({dataList:save});  
+                      this.setState({bshow:true});  
+                 
+                   
+                   break;
+               case 1:
+                  
+                
+                       let finishArr = this.state. storageList.filter((item,index)=>{
+                            return item.state
+                       })
+                       console.log(finishArr);
+                       this.setState({dataList:finishArr});
+                       this.setState({bshow:false}); 
+                  
+                   break;
+           
+              case 2:
+                     let unfinishArr = this.state. storageList.filter((item,index)=>{
+                            return !item.state;
+                       })
+                       console.log(unfinishArr)
+                       this.setState({dataList:unfinishArr});
+                       this.setState({bshow:false}); 
+
+                  
+                   break;
+           
+               default:
+                   break;
+           }
+        },
+        render(){
+            console.log(this,"fu")
+            let {inputVal,show,dataList,bshow} = this.state
+            return (
+                <div>
+                       {bshow?<input value={inputVal} placeholder="请输入信息" onChange={this.handleInput}/>:''} 
+                       {bshow? <button className="addinfo" onClick={this.handleClick.bind(this)}>添加</button>:''}
+                         <button onClick={this.all.bind(this,0)}>全部</button> <button onClick={this.all.bind(this,1)}>已完成</button> <button onClick={this.all.bind(this,2)}>未完成</button>
+                         <hr/>
+                         {show?<List delInfo={this.delInfoData} changeInfo={this.changeInfoData} bshow={this.state.bshow}>{dataList}</List>:""}
+                </div>
+               
+            )
+        }
+
+    })
+    let List = React.createClass({
+        // getInitialState(){
+             
+        // },
+        handleDel(index){
+           this.props.delInfo(index)
+        },
+        changeCon(index){
+            this.props.changeInfo(index)
+        },
+        render(){
+            console.log(this.props.bshow)
+            let arr = this.props.children;
+           console.log(this.props.children)
+            return(
+                <ul>
+                    {
+                      arr.map((item,index)=>{
+                          return (<li>{item.inputVal} {item.state?'已完成':<button onClick={this.changeCon.bind(this,index)}>未完成</button>}{this.props.bshow?<button onClick={this.handleDel.bind(this,index)}>删除</button>:''}</li>)
+                      })
+                    }
+                   
+                </ul>    
+            )
+        }
+    })
+    ReactDOM.render(<Component/>,app)
+</script>
+</html>

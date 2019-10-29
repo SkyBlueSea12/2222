@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../base/react.min.js"></script>
+    <script src="../base/react-dom.min.js"></script>
+    <script src="../base/browser.min.js"></script>
+    <style>
+            .box{
+                width:300px;
+                height:200px;
+                background:burlywood;
+                padding:20px;
+            }
+            .box .child, .box .child2{
+                width:200px;
+                height:30px;
+                padding:20px;
+                background:green;
+
+            }
+            .box .child2{
+                background:yellow;
+            }
+    </style>
+</head>
+<body>
+    <div id="app">
+
+    </div>
+    
+</body>
+<script type="text/babel">
+        var Component = React.createClass({
+          getInitialState() {
+                return {
+                    val:""
+                }
+            },
+            render(){
+                let {val} = this.state;
+                console.log(this)
+                return(
+                         
+                            <div className='box'>
+                                {val}
+                                <span>父组件</span>
+                                <Child>父传子的值123</Child>
+                                <Child2 handleInfo={this.handleRec.bind(this)}></Child2>
+                           </div>  
+                
+                )
+            },
+            handleRec(val){
+                this.setState({val:val})
+            }
+        })
+        var Child = React.createClass({
+           render(){
+                console.log("子组件1",this);
+                 return(
+                     <div className="child"> 
+                        子组件1：
+                        {this.props.children}
+                    </div>
+                 )
+             }
+        })
+        var Child2= React.createClass({
+            childSend(){
+                  this.props.handleInfo(123) 
+                },
+           render(){
+                console.log("子组件2",this);
+                 return(
+                 
+                            <div className="child2"> 
+                               <span>子组件</span>
+                               <button onClick={this.childSend.bind(this)}>传递</button>
+                   
+                            </div>
+                          
+                    
+                 )
+             }
+           
+        })
+//   var chlid =  React.createElement("ul",{className:"dada",id:"123"},[
+//   React.createElement("li",{className:"xixi"},"456")
+//   ])
+ 
+        
+
+//   {/*ReactDOM.render(chlid,app)*/}
+    ReactDOM.render(<Component/>,app)
+</script>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../base/react.min.js"></script>
+    <script src="../base/react-dom.min.js"></script>
+    <script src="../base/browser.min.js"></script>
+    <style>
+        td{
+            border:1px solid red;
+        }
+        .selecte{
+            opacity:.5;
+        }
+       
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <script type="text/babel">
+           let Component = React.createClass({
+                getInitialState(){
+                        return {
+                            sel:0,
+                            list:[
+                                [1],
+                                [1,2],
+                                [1,2,3],
+                                [1,2,3,4],
+                                [1,2,3,4,5],
+                                [1,2,3,4,5,6],
+                                [1,2,3,4,5,6,7],
+                                [1,2,3,4,5,6,7,8],
+                                [1,2,3,4,5,6,7,8,9]]
+                        }
+                    
+                    },
+
+                    gettd(item,hr){
+                        return (
+                            item.map((item,index)=>{
+                                return (<td>{item}*{hr+1}={item*(hr+1)}</td>)
+                            })
+                        )
+                    },
+                    sel(index){
+                        console.log(index)
+                        this.setState({sel:index})    
+                    },
+          render(){
+                //   console.log(this)
+                 return (
+                     <table>
+                         {
+                            this.state.list.map((item,index)=>{
+                                return (<tr style={{background:index%2?'red':'blue'}} className={this.state.sel==index?'selecte':''}
+                                onMouseOver={this.sel.bind(this,index)}>{this.gettd(item,index)}</tr>)
+                            })
+                         }
+                     </table>
+                 )
+                }
+          })
+           ReactDOM.render(<Component/>,app)
+
+    </script>
+</body>
+</html>
